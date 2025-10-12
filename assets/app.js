@@ -1,13 +1,13 @@
 const TEMPLATE = document.querySelector('#template')
 const ITEMS = 10
-let ITERATOR = 0
 const FORMATTER = (duration) => new Intl.DurationFormat('fr', { style: 'digital' }).format(duration)
 
-for (ITERATOR; ITERATOR < ITEMS; ITERATOR++) {
-  const TEMPLATE_CONTENT = TEMPLATE.content.cloneNode(true)
-  document.body.appendChild(TEMPLATE_CONTENT)
-  init(document.querySelectorAll('.js-cell')[ITERATOR])
-}
+Array.from({ length: ITEMS }).forEach(() => {
+  const content = TEMPLATE.content.cloneNode(true)
+  document.body.appendChild(content)
+})
+
+document.querySelectorAll('.js-cell').forEach(init)
 
 /**
  * Init timer
@@ -15,45 +15,41 @@ for (ITERATOR; ITERATOR < ITEMS; ITERATOR++) {
  */
 
 function init (cell) {
-  // timer storage
-  const duration = {
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  }
-  let interval
+  const duration = { hours: 0, minutes: 0, seconds: 0 }
+  let intervalId
 
-  // elements
   const startButton = cell.querySelector('.js-button-start')
   const pauseButton = cell.querySelector('.js-button-pause')
   const resetButton = cell.querySelector('.js-button-reset')
   const timerElement = cell.querySelector('.js-timer')
 
-  // attach events
-  startButton.addEventListener('click', () => {
-    clearInterval(interval)
-    interval = setInterval(startTimer, 1000)
-    function startTimer () {
-      duration.seconds++
-      if (duration.seconds > 59) {
-        duration.minutes++
-        duration.seconds = 0
-      }
-      if (duration.minutes > 59) {
-        duration.hours++
-        duration.minutes = 0
-      }
-      timerElement.innerText = FORMATTER(duration)
+  function updateTimer () {
+    duration.seconds++
+    if (duration.seconds > 59) {
+      duration.minutes++
+      duration.seconds = 0
     }
-  })
-
-  pauseButton.addEventListener('click', () => {
-    clearInterval(interval)
-  })
-
-  resetButton.addEventListener('click', () => {
-    clearInterval(interval)
-    duration.hours = duration.minutes = duration.seconds = 0
+    if (duration.minutes > 59) {
+      duration.hours++
+      duration.minutes = 0
+    }
     timerElement.innerText = FORMATTER(duration)
-  })
+  }
+
+  function start () {
+    clearInterval(intervalId)
+    intervalId = setInterval(updateTimer, 1000)
+  }
+
+  const pause = () => clearInterval(intervalId)
+
+  function reset () {
+    clearInterval(intervalId)
+    Object.assign(duration, { hours: 0, minutes: 0, seconds: 0 })
+    timerElement.textContent = FORMATTER(duration)
+  }
+
+  startButton.addEventListener('click', start)
+  pauseButton.addEventListener('click', pause)
+  resetButton.addEventListener('click', reset)
 }
