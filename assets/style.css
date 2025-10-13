@@ -27,17 +27,9 @@ body {
   outline: 1px solid #fff;
 }
 
-input {
+input[type="text"] {
   width: 100%;
   padding: 5px 10px;
-}
-
-.name {
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 1.5rem;
-  white-space: nowrap;
 }
 
 .timer {

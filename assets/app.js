@@ -18,8 +18,7 @@ function init (cell) {
   const duration = { hours: 0, minutes: 0, seconds: 0 }
   let intervalId
 
-  const startButton = cell.querySelector('.js-button-start')
-  const pauseButton = cell.querySelector('.js-button-pause')
+  const toggleTimerElement = cell.querySelector('.js-toggle-timer')
   const resetButton = cell.querySelector('.js-button-reset')
   const timerElement = cell.querySelector('.js-timer')
 
@@ -36,20 +35,20 @@ function init (cell) {
     timerElement.innerText = FORMATTER(duration)
   }
 
-  function start () {
+  function toggle ({ target: { checked } }) {
     clearInterval(intervalId)
-    intervalId = setInterval(updateTimer, 1000)
+    if (checked === true) {
+      intervalId = setInterval(updateTimer, 1000)
+    }
   }
-
-  const pause = () => clearInterval(intervalId)
 
   function reset () {
     clearInterval(intervalId)
     Object.assign(duration, { hours: 0, minutes: 0, seconds: 0 })
     timerElement.textContent = FORMATTER(duration)
+    toggleTimerElement.checked = false
   }
 
-  startButton.addEventListener('click', start)
-  pauseButton.addEventListener('click', pause)
+  toggleTimerElement.addEventListener('change', toggle)
   resetButton.addEventListener('click', reset)
 }
