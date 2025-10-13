@@ -25,6 +25,7 @@ body {
   padding: 10px;
   min-width: 0;
   outline: 1px solid #fff;
+  position: relative;
 }
 
 input[type="text"] {
@@ -39,21 +40,25 @@ input[type="text"] {
   font-variant: tabular-nums;
 }
 
-.timer-control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-}
-
 .timer-control button {
   padding: 0;
   border: none;
   font-size: 0;
   background: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: pointer;
 }
 
 .timer-control svg {
   font-size: 3rem;
   pointer-events: none;
+}
+
+.timer-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
 }
