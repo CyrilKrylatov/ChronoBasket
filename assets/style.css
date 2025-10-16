@@ -12,13 +12,19 @@ html {
 }
 
 body {
-  display: grid;
-  grid-template-rows: repeat(2,1fr);
-  grid-template-columns: repeat(5,1fr);
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   margin: 0;
   font-family: system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
   background: #fea;
+}
+
+main {
+  flex-grow: 1;
+  grid-template-rows: repeat(2,1fr);
+  grid-template-columns: repeat(5,1fr);
+  display: grid;
 }
 
 .cell {
@@ -40,14 +46,11 @@ input[type="text"] {
   font-variant: tabular-nums;
 }
 
-.timer-control button {
+button[type="button"] {
   padding: 0;
   border: none;
   font-size: 0;
   background: none;
-  position: absolute;
-  bottom: 0;
-  right: 0;
   cursor: pointer;
 }
 
@@ -61,4 +64,14 @@ input[type="text"] {
   justify-content: center;
   gap: 5px;
   align-items: center;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  flex-shrink: 0;
+}
+
+footer svg {
+  font-size: 3rem;
 }

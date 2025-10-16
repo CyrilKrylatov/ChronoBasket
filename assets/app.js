@@ -1,10 +1,15 @@
 const TEMPLATE = document.querySelector('#template')
 const ITEMS = 10
 const FORMATTER = (duration) => new Intl.DurationFormat('fr', { style: 'digital' }).format(duration)
+const MAINELEMENT = document.querySelector('.js-main')
+
+/**
+ * Create DOM
+ */
 
 Array.from({ length: ITEMS }).forEach(() => {
   const content = TEMPLATE.content.cloneNode(true)
-  document.body.appendChild(content)
+  MAINELEMENT.appendChild(content)
 })
 
 document.querySelectorAll('.js-cell').forEach(init)
