@@ -47,8 +47,16 @@
             </div>
         </div>
     </template>
-    <script src="assets/app.js"></script>
-
+    <script type="module">
+        import { Timer } from './assets/timer.js'
+        const TEMPLATE = document.querySelector('#template')
+        const MAINELEMENT = document.querySelector('.js-main')
+        Array.from({ length: 10 }).forEach(() => {
+            const content = TEMPLATE.content.cloneNode(true)
+            MAINELEMENT.appendChild(content)
+        })
+        document.querySelectorAll('.js-cell').forEach((element) => new Timer(element))
+    </script>
 </body>
 
 </html>

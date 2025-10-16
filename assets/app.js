@@ -1,3 +1,5 @@
+// import { Timer } from './timer'
+
 const MAINELEMENT = document.querySelector('.js-main')
 const TEMPLATE = document.querySelector('#template')
 const LAUNCHBUTTON = document.querySelector('.js-launch-timer')
@@ -14,7 +16,7 @@ Array.from({ length: 10 }).forEach(() => {
 })
 
 const CELLSELEMENTS = document.querySelectorAll('.js-cell')
-CELLSELEMENTS.forEach(init)
+// CELLSELEMENTS.forEach((element) => new Timer(element))
 /**
  * Init timer
  * @param {Object} cell - wrapping element
