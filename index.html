@@ -49,13 +49,27 @@
     </template>
     <script type="module">
         import { Timer } from './assets/timer.js'
+
+        window.is_timer_launched = false
+
         const TEMPLATE = document.querySelector('#template')
         const MAINELEMENT = document.querySelector('.js-main')
+        const TIMERS = new Map()
+
         Array.from({ length: 10 }).forEach(() => {
             const content = TEMPLATE.content.cloneNode(true)
             MAINELEMENT.appendChild(content)
         })
-        document.querySelectorAll('.js-cell').forEach((element) => new Timer(element))
+        document.querySelectorAll('.js-cell').forEach((element) => {
+            const launchTimer = new Timer(element)
+            TIMERS.set(element.id, launchTimer)
+        })
+        document.querySelector('.js-launch-timer').addEventListener('click', () => {
+            window.is_timer_launched = true
+            TIMERS.forEach((timer) => {
+                timer.launch()
+            })
+        })
     </script>
 </body>
 
