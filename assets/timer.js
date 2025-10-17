@@ -7,6 +7,10 @@ export class Timer {
   #toggleTimerElement
   /** @type {Element} */
   #displayTimerElement
+  /** @type {Element} */
+  #resetElement
+  /** @type {Element} */
+  #nameElement
   /** @type {{hours: number, minutes: number, seconds: number}} */
   #duration = { hours: 0, minutes: 0, seconds: 0 }
   /** @type {number} */
@@ -25,10 +29,13 @@ export class Timer {
   #setElements () {
     this.#toggleTimerElement = this.#element.querySelector('.js-playeronfield')
     this.#displayTimerElement = this.#element.querySelector('.js-timer')
+    this.#resetElement = this.#element.querySelector('.js-button-reset')
+    this.#nameElement = this.#element.querySelector('.js-name')
   }
 
   #setEvents () {
     this.#toggleTimerElement.addEventListener('change', this.#toggle.bind(this))
+    this.#resetElement.addEventListener('click', this.#reset.bind(this))
   }
 
   #toggle () {
@@ -36,6 +43,16 @@ export class Timer {
       return
     }
     this.launch()
+  }
+
+  #reset () {
+    if (!window.confirm(`Remettre à 0 le temps de ${this.#nameElement.value} ?`)) {
+      return
+    }
+    clearInterval(this.#intervalId)
+    Object.assign(this.#duration, { hours: 0, minutes: 0, seconds: 0 })
+    this.#displayTimerElement.innerText = FORMATTER(this.#duration)
+    this.#toggleTimerElement.checked = false
   }
 
   launch () {
