@@ -1,10 +1,15 @@
 const FORMATTER = (duration) => new Intl.DurationFormat('fr', { style: 'digital' }).format(duration)
 
 export class Timer {
+  /** @type {Element} */
   #element
+  /** @type {Element} */
   #toggleTimerElement
+  /** @type {Element} */
   #displayTimerElement
+  /** @type {{hours: number, minutes: number, seconds: number}} */
   #duration = { hours: 0, minutes: 0, seconds: 0 }
+  /** @type {number} */
   #intervalId = 0
 
   /**
@@ -26,10 +31,7 @@ export class Timer {
     this.#toggleTimerElement.addEventListener('change', this.#toggle.bind(this))
   }
 
-  /**
-   * @param {Boolean} checked
-   */
-  #toggle ({ target: { checked } }) {
+  #toggle () {
     if (window.is_timer_launched === false) {
       return
     }
