@@ -46,6 +46,10 @@ export class Timer {
     this.#intervalId = setInterval(this.#updateTimer.bind(this), 1000)
   }
 
+  pause () {
+    clearInterval(this.#intervalId)
+  }
+
   #updateTimer () {
     this.#duration.seconds++
     if (this.#duration.seconds > 59) {
