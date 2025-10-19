@@ -1,3 +1,7 @@
+:root {
+  --transition-delay: 200ms;
+}
+
 html {
   box-sizing: border-box;
   font-size: 1em;
@@ -18,6 +22,29 @@ body {
   margin: 0;
   font-family: system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
   background: #fea;
+}
+
+.quarters {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-quarter {
+  font-size: 2em;
+  padding: 10px;
+  border: none;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color var(--transition-delay) ease, background-color var(--transition-delay) ease;
+}
+
+.btn-quarter.is-active {
+  background-color: #000;
+  color: #fff;
 }
 
 main {

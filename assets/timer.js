@@ -4,17 +4,35 @@ export class Timer {
   /** @type {Element} */
   #element
   /** @type {Element} */
-  #toggleTimerElement
+  #checkboxElement
   /** @type {Element} */
   #displayTimerElement
   /** @type {Element} */
   #resetElement
   /** @type {Element} */
   #nameElement
-  /** @type {{hours: number, minutes: number, seconds: number}} */
-  #duration = { hours: 0, minutes: 0, seconds: 0 }
+  /** @type {{1: {hours: number, minutes: number, seconds: number}, 2: {hours: number, minutes: number, seconds: number}, 3: {hours: number, minutes: number, seconds: number}, 4: {hours: number, minutes: number, seconds: number}}} */
+  #duration = {
+    1: { hours: 0, minutes: 0, seconds: 0 },
+    2: { hours: 0, minutes: 0, seconds: 0 },
+    3: { hours: 0, minutes: 0, seconds: 0 },
+    4: { hours: 0, minutes: 0, seconds: 0 },
+  }
   /** @type {number} */
   #intervalId = 0
+  /** @type {number} */
+  #quarter = 1
+
+  /**
+   * @param {number} quarter
+   */
+  set quarter (quarter) {
+    this.#quarter = quarter
+  }
+
+  get duration () {
+    return this.#duration[this.#quarter]
+  }
 
   /**
    * @param {Element} element
@@ -27,14 +45,14 @@ export class Timer {
   }
 
   #setElements () {
-    this.#toggleTimerElement = this.#element.querySelector('.js-playeronfield')
+    this.#checkboxElement = this.#element.querySelector('.js-playeronfield')
     this.#displayTimerElement = this.#element.querySelector('.js-timer')
     this.#resetElement = this.#element.querySelector('.js-button-reset')
     this.#nameElement = this.#element.querySelector('.js-name')
   }
 
   #setEvents () {
-    this.#toggleTimerElement.addEventListener('change', this.#toggle.bind(this))
+    this.#checkboxElement.addEventListener('change', this.#toggle.bind(this))
     this.#resetElement.addEventListener('click', this.#reset.bind(this))
   }
 
@@ -42,7 +60,7 @@ export class Timer {
     if (window.is_timer_launched === false) {
       return
     }
-    this.launch()
+    this.start()
   }
 
   #reset () {
@@ -50,14 +68,14 @@ export class Timer {
       return
     }
     clearInterval(this.#intervalId)
-    Object.assign(this.#duration, { hours: 0, minutes: 0, seconds: 0 })
-    this.#displayTimerElement.innerText = FORMATTER(this.#duration)
-    this.#toggleTimerElement.checked = false
+    Object.assign(this.duration, { hours: 0, minutes: 0, seconds: 0 })
+    this.#displayTimerElement.innerText = FORMATTER(this.duration)
+    this.#checkboxElement.checked = false
   }
 
-  launch () {
+  start () {
     clearInterval(this.#intervalId)
-    if (this.#toggleTimerElement.checked === false) {
+    if (this.#checkboxElement.checked === false) {
       return
     }
     this.#intervalId = setInterval(this.#updateTimer.bind(this), 1000)
@@ -67,16 +85,27 @@ export class Timer {
     clearInterval(this.#intervalId)
   }
 
-  #updateTimer () {
-    this.#duration.seconds++
-    if (this.#duration.seconds > 59) {
-      this.#duration.minutes++
-      this.#duration.seconds = 0
+  updateFromQuarter () {
+    this.#updateDisplayTimer()
+    if (this.#checkboxElement.checked === false) {
+      return
     }
-    if (this.#duration.minutes > 59) {
-      this.#duration.hours++
-      this.#duration.minutes = 0
-    }
-    this.#displayTimerElement.innerText = FORMATTER(this.#duration)
+    this.pause()
+    this.#checkboxElement.checked = false
   }
+
+  #updateTimer () {
+    this.duration.seconds++
+    if (this.duration.seconds > 59) {
+      this.duration.minutes++
+      this.duration.seconds = 0
+    }
+    if (this.duration.minutes > 59) {
+      this.duration.hours++
+      this.duration.minutes = 0
+    }
+    this.#updateDisplayTimer()
+  }
+
+  #updateDisplayTimer = () => this.#displayTimerElement.innerText = FORMATTER(this.duration)
 }

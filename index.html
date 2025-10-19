@@ -23,6 +23,12 @@
 </head>
 
 <body>
+    <header class="quarters js-quarters">
+        <button class="btn-quarter is-active" data-quarter-id="1">Q1</button>
+        <button class="btn-quarter" data-quarter-id="2">Q2</button>
+        <button class="btn-quarter" data-quarter-id="3">Q3</button>
+        <button class="btn-quarter" data-quarter-id="4">Q4</button>
+    </header>
     <main class="js-main"></main>
     <footer>
         <button type="button" class="js-launch-timer">
@@ -50,13 +56,14 @@
     <script type="module">
         import { Timer } from './assets/timer.js'
 
-        window.is_timer_launched = false
+        window.is_timer_started = false
 
         const TEMPLATE = document.querySelector('#template')
         const MAINELEMENT = document.querySelector('.js-main')
         const TIMERS = new Map()
         const PLAYBUTTON = document.querySelector('.js-launch-timer')
         const PAUSEBUTTON = document.querySelector('.js-pause-timer')
+        const QUARTERSWRAPPERELEMENT = document.querySelector('.js-quarters')
 
         Array.from({ length: 10 }).forEach(() => {
             const content = TEMPLATE.content.cloneNode(true)
@@ -70,18 +77,32 @@
         PLAYBUTTON.addEventListener('click', ({ target }) => {
             target.hidden = true
             PAUSEBUTTON.hidden = false
-            window.is_timer_launched = true
+            window.is_timer_started = true
             TIMERS.forEach((timer) => {
-                timer.launch()
+                timer.start()
             })
         })
 
         PAUSEBUTTON.addEventListener('click', ({ target }) => {
-            window.is_timer_launched = false
+            window.is_timer_started = false
             target.hidden = true
             PLAYBUTTON.hidden = false
             TIMERS.forEach((timer) => {
                 timer.pause()
+            })
+        })
+
+        QUARTERSWRAPPERELEMENT.addEventListener('click', ({ target }) => {
+            if (!target.dataset.quarterId) {
+                return
+            }
+            QUARTERSWRAPPERELEMENT.querySelector('.is-active')?.classList.remove('is-active')
+            target.classList.add('is-active')
+            PLAYBUTTON.hidden = false
+            PAUSEBUTTON.hidden = true
+            TIMERS.forEach((timer) => {
+                timer.quarter = Number(target.dataset.quarterId)
+                timer.updateFromQuarter()
             })
         })
     </script>
