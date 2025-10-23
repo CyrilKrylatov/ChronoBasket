@@ -77,7 +77,6 @@ input[type="text"] {
 button[type="button"] {
   padding: 0;
   border: none;
-  font-size: 0;
   background: none;
   cursor: pointer;
 }
@@ -95,6 +94,23 @@ svg {
   justify-content: center;
   gap: 5px;
   align-items: center;
+}
+
+.addtimes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.addtimes button {
+  width: 52px;
+  height: 52px;
+  border: 1px black solid;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-variant: tabular-nums;
+  user-select: none;
 }
 
 footer {

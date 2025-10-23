@@ -11,6 +11,8 @@ export class Timer {
   #resetElement
   /** @type {Element} */
   #nameElement
+  /** @type {Element} */
+  #addTimesElement
   /** @type {{1: {hours: number, minutes: number, seconds: number}, 2: {hours: number, minutes: number, seconds: number}, 3: {hours: number, minutes: number, seconds: number}, 4: {hours: number, minutes: number, seconds: number}}} */
   #duration = {
     1: { hours: 0, minutes: 0, seconds: 0 },
@@ -49,11 +51,13 @@ export class Timer {
     this.#displayTimerElement = this.#element.querySelector('.js-timer')
     this.#resetElement = this.#element.querySelector('.js-button-reset')
     this.#nameElement = this.#element.querySelector('.js-name')
+    this.#addTimesElement = this.#element.querySelector('.js-addtimes')
   }
 
   #setEvents () {
     this.#checkboxElement.addEventListener('change', this.#toggle.bind(this))
     this.#resetElement.addEventListener('click', this.#reset.bind(this))
+    this.#addTimesElement.addEventListener('click', this.#addTimes.bind(this))
   }
 
   #toggle () {
@@ -94,8 +98,17 @@ export class Timer {
     this.#checkboxElement.checked = false
   }
 
-  #updateTimer () {
-    this.duration.seconds++
+  /**
+   * Add or substract a second to the timer
+   * @param {('add'|'substract')} operation
+   */
+  #updateTimer (operation = 'add') {
+    if (operation === 'substract' && this.duration.seconds === 0) {
+      return
+    }
+
+    operation === 'add' ? ++this.duration.seconds : --this.duration.seconds
+
     if (this.duration.seconds > 59) {
       this.duration.minutes++
       this.duration.seconds = 0
@@ -108,4 +121,12 @@ export class Timer {
   }
 
   #updateDisplayTimer = () => this.#displayTimerElement.innerText = FORMATTER(this.duration)
+
+  /**
+   * Add time to the timer
+   * @param {string} operation
+   */
+  #addTimes ({ target: { dataset: { operation = 'add' }} }) {
+    this.#updateTimer(operation)
+  }
 }
