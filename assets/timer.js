@@ -13,13 +13,8 @@ export class Timer {
   #nameElement
   /** @type {Element} */
   #addTimesElement
-  /** @type {{1: {hours: number, minutes: number, seconds: number}, 2: {hours: number, minutes: number, seconds: number}, 3: {hours: number, minutes: number, seconds: number}, 4: {hours: number, minutes: number, seconds: number}}} */
-  #duration = {
-    1: { hours: 0, minutes: 0, seconds: 0 },
-    2: { hours: 0, minutes: 0, seconds: 0 },
-    3: { hours: 0, minutes: 0, seconds: 0 },
-    4: { hours: 0, minutes: 0, seconds: 0 },
-  }
+  /** @type {number[]} */
+  #duration = [0, 0, 0, 0]
   /** @type {number} */
   #intervalId = 0
   /** @type {number} */
@@ -32,8 +27,17 @@ export class Timer {
     this.#quarter = quarter
   }
 
-  get duration () {
-    return this.#duration[this.#quarter]
+  /**
+   * Decomposes a duration in seconds into hours, minutes, and seconds.
+   * @returns {{hours: number, minutes: number, seconds: number}} The decomposed duration object.
+   */
+
+  get decomposeDuration () {
+    const secondsInQuarter = this.#duration[this.#quarter]
+    const hours = Math.floor(secondsInQuarter / 3600)
+    const minutes = Math.floor((secondsInQuarter % 3600) / 60)
+    const seconds = secondsInQuarter % 60
+    return { hours, minutes, seconds }
   }
 
   /**
@@ -72,8 +76,8 @@ export class Timer {
       return
     }
     clearInterval(this.#intervalId)
-    Object.assign(this.duration, { hours: 0, minutes: 0, seconds: 0 })
-    this.#displayTimerElement.innerText = FORMATTER(this.duration)
+    this.#duration[this.#quarter] = 0
+    this.#displayTimerElement.innerText = FORMATTER(this.decomposeDuration)
     this.#checkboxElement.checked = false
   }
 
@@ -100,33 +104,20 @@ export class Timer {
 
   /**
    * Add or substract a second to the timer
-   * @param {('add'|'substract')} operation
+   * @param {(-1|1)} increment
    */
-  #updateTimer (operation = 'add') {
-    if (operation === 'substract' && this.duration.seconds === 0) {
-      return
-    }
-
-    operation === 'add' ? ++this.duration.seconds : --this.duration.seconds
-
-    if (this.duration.seconds > 59) {
-      this.duration.minutes++
-      this.duration.seconds = 0
-    }
-    if (this.duration.minutes > 59) {
-      this.duration.hours++
-      this.duration.minutes = 0
-    }
+  #updateTimer (increment = 1) {
+    this.#duration[this.#quarter] = Math.max(0, this.#duration[this.#quarter] + increment)
     this.#updateDisplayTimer()
   }
 
-  #updateDisplayTimer = () => this.#displayTimerElement.innerText = FORMATTER(this.duration)
+  #updateDisplayTimer = () => this.#displayTimerElement.innerText = FORMATTER(this.decomposeDuration)
 
   /**
    * Add time to the timer
-   * @param {string} operation
+   * @param {string} increment
    */
-  #addTimes ({ target: { dataset: { operation = 'add' }} }) {
-    this.#updateTimer(operation)
+  #addTimes ({ target: { dataset: { increment = '+1' }} }) {
+    this.#updateTimer(Number(increment))
   }
 }
