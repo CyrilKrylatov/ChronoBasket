@@ -27,17 +27,20 @@ export class Timer {
     this.#quarter = quarter
   }
 
-  /**
-   * Decomposes a duration in seconds into hours, minutes, and seconds.
-   * @returns {{hours: number, minutes: number, seconds: number}} The decomposed duration object.
-   */
+  get duration () {
+    return this.#duration
+  }
 
-  get decomposeDuration () {
-    const secondsInQuarter = this.#duration[this.#quarter]
-    const hours = Math.floor(secondsInQuarter / 3600)
-    const minutes = Math.floor((secondsInQuarter % 3600) / 60)
-    const seconds = secondsInQuarter % 60
-    return { hours, minutes, seconds }
+  /**
+   * Format given seconds with Intl.DurationFormat
+   * @param {Number} duration
+   * @returns {*}
+   */
+  format (duration) {
+    const hours = Math.floor(duration / 3600)
+    const minutes = Math.floor((duration % 3600) / 60)
+    const seconds = duration % 60
+    return FORMATTER({ hours, minutes, seconds })
   }
 
   /**
@@ -77,7 +80,7 @@ export class Timer {
     }
     clearInterval(this.#intervalId)
     this.#duration[this.#quarter] = 0
-    this.#displayTimerElement.innerText = FORMATTER(this.decomposeDuration)
+    this.#displayTimerElement.innerText = this.format(this.#duration[this.#quarter])
     this.#checkboxElement.checked = false
   }
 
@@ -111,7 +114,7 @@ export class Timer {
     this.#updateDisplayTimer()
   }
 
-  #updateDisplayTimer = () => this.#displayTimerElement.innerText = FORMATTER(this.decomposeDuration)
+  #updateDisplayTimer = () => this.#displayTimerElement.innerText = this.format(this.#duration[this.#quarter])
 
   /**
    * Add time to the timer
