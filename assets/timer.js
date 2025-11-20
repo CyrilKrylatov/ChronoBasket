@@ -18,7 +18,16 @@ export class Timer {
   /** @type {number} */
   #intervalId = 0
   /** @type {number} */
-  #quarter = 1
+  #quarter = 0
+
+  /**
+   * @param {Element} element
+   */
+  constructor (element) {
+    this.#element = element
+    this.#setElements()
+    this.#setEvents()
+  }
 
   /**
    * @param {number} quarter
@@ -41,16 +50,6 @@ export class Timer {
     const minutes = Math.floor((duration % 3600) / 60)
     const seconds = duration % 60
     return FORMATTER({ hours, minutes, seconds })
-  }
-
-  /**
-   * @param {Element} element
-   */
-  constructor (element) {
-    this.#element = element
-    this.#element.id = `cell-${window.crypto.randomUUID()}`
-    this.#setElements()
-    this.#setEvents()
   }
 
   #setElements () {
