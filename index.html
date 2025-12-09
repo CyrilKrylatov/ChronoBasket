@@ -91,7 +91,6 @@
             const PLAYBUTTON = document.querySelector('.js-launch-timer')
             const PAUSEBUTTON = document.querySelector('.js-pause-timer')
             const QUARTERSWRAPPERELEMENT = document.querySelector('.js-quarters')
-            const NAMES = ['Rosemary Palmer', 'Theo Rosales', 'Kinley Pearson', 'Gunner Ponce', 'Aileen Villanueva', 'Huxley Good', 'Nathalia Dyer', 'Atreus Camacho', 'Armani Benjamin', 'Kyro Rogers']
             const TABLE = document.querySelector('.js-table')
             const DIALOG = document.querySelector('dialog')
 
@@ -102,7 +101,6 @@
 
             document.querySelectorAll('.js-cell').forEach((element, index) => {
                 element.id = `cell-${window.crypto.randomUUID()}`
-                element.querySelector('.js-name').value = NAMES[index]
                 const launchTimer = new Timer(element)
                 TIMERS.set(element.id, launchTimer)
             })
