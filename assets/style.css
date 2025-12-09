@@ -185,3 +185,15 @@ table {
     }
   }
 }
+
+.timer-control {
+  margin-top: 15px;
+  text-align: center;
+  button {
+    padding: 16px;
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
